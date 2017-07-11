@@ -26,6 +26,9 @@ var p5_2_f = function(p) {
   };
 
   p.draw = function() {
+    p.stroke(0); 
+    p.fill(255);
+    p.rect(0, 0, p.width, p.height);
     p.fill(255);
     p.stroke(0);
     p.ellipse(50, 50, 80, 80);
