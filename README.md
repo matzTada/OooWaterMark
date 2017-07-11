@@ -1,5 +1,9 @@
 #OooWaterMark
-some exlanations...  
+メモ
+
+* 複数キャンバスを使うなら[instance mode](https://github.com/processing/p5.js/wiki/p5.js-overview#instantiation--namespace)を使う
+	* これも役に立つ <http://www.joemckaystudio.com/multisketches/> 
+* 
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_MOVIE_ID_HERE
 " target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_MOVIE_ID_HERE/0.jpg" 
