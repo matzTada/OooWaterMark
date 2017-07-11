@@ -18,6 +18,8 @@ var bigRadius;
 
 var scribble;
 
+var gotStr;
+
 function setup() {
 
   var tmpCanvas = createCanvas(windowWidth, windowHeight);
@@ -43,6 +45,8 @@ function setup() {
   noLoop();
 
   scribble = new Scribble();
+
+  gotStr = "input value";
 }
 
 
@@ -112,32 +116,36 @@ function draw() {
 
   }
 
+  // visBin(gotStr);
+
 }
 
-function visBin() {
-  clear();
-  label = document.getElementById('inStrTextbox').value;
+function getValue(){
+  gotStr = document.getElementById('inStrTextbox').value;
+  visBin(gotStr);
+}
 
+function visBin(inputStr) {
   textSize(20);
   noStroke();
   fill(fillColor);
   textAlign(LEFT, TOP);
-  var textStr = str(label) + " " + label.length;
+  var textStr = str(inputStr) + " " + inputStr.length;
   text(textStr, 5, 5);
 
   var boxSize = 50;
   strokeWeight(5);
   stroke(strokeColor);
   rectMode(LEFT, TOP);
-  for (var i = 0; i < label.length; i++) {
-    // console.log(label.charAt(i) + " " + label.charCodeAt(i).toString(2) + " " + label.charCodeAt(i).toString(2).length);
-    var binLength = (label.charCodeAt(i).toString(2).length <= 8) ? 8 : 16;
+  for (var i = 0; i < inputStr.length; i++) {
+    // console.log(inputStr.charAt(i) + " " + inputStr.charCodeAt(i).toString(2) + " " + inputStr.charCodeAt(i).toString(2).length);
+    var binLength = (inputStr.charCodeAt(i).toString(2).length <= 8) ? 8 : 16;
     for (var j = 0; j < binLength; j++) {
       var x = (1.5 * j + 1) * boxSize;
       var y = (1.5 * i + 1) * boxSize;
       scribble.scribbleRect(x, y, boxSize, boxSize);
 
-      if (label.charCodeAt(i).toString(2).charAt(j - binLength + label.charCodeAt(i).toString(2).length) == "1") {
+      if (inputStr.charCodeAt(i).toString(2).charAt(j - binLength + inputStr.charCodeAt(i).toString(2).length) == "1") {
         var xCoords = [x - 0.5 * boxSize, x + 0.5 * boxSize, x + 0.5 * boxSize, x - 0.5 * boxSize];
         var yCoords = [y - 0.5 * boxSize, y - 0.5 * boxSize, y + 0.5 * boxSize, y + 0.5 * boxSize];
         var gap = 3.5;
