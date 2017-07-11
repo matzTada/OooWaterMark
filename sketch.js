@@ -20,6 +20,9 @@ var scribble;
 
 var gotStr;
 
+var drawVisBin = true;
+var visBinStyle = [0, 1];
+
 function setup() {
 
   var tmpCanvas = createCanvas(windowWidth, windowHeight);
@@ -34,15 +37,15 @@ function setup() {
   gui.addGlobals('numShapes', 'bigRadius');
 
   // Create Shape GUI
-  gui2 = createGui('Style', width - 220, height - 200);
+  gui2 = createGui('Style', width - 220, height - 500);
   colorMode(HSB);
   sliderRange(0, 50, 1);
-  gui2.addGlobals('shape', 'label', 'radius', 'drawFill', 'fillColor');
+  gui2.addGlobals('shape', 'label', 'radius', 'drawFill', 'fillColor', 'drawVisBin', 'visBinStyle');
   sliderRange(0, 10, 0.1);
   gui2.addGlobals('drawStroke', 'strokeColor', 'strokeWidth');
 
   // Don't loop automatically
-  noLoop();
+  // noLoop();
 
   scribble = new Scribble();
 
@@ -116,44 +119,56 @@ function draw() {
 
   }
 
-  // visBin(gotStr);
 
-}
-
-function getValue(){
-  gotStr = document.getElementById('inStrTextbox').value;
-  visBin(gotStr);
-}
-
-function visBin(inputStr) {
   textSize(20);
   noStroke();
   fill(fillColor);
   textAlign(LEFT, TOP);
-  var textStr = str(inputStr) + " " + inputStr.length;
+  var textStr = str(label) + " " + label.length;
   text(textStr, 5, 5);
 
-  var boxSize = 50;
-  strokeWeight(5);
-  stroke(strokeColor);
-  rectMode(LEFT, TOP);
+  if (drawVisBin) {
+    visBin(label, radius, visBinStyle);
+  }
+}
+
+// function getValue(){
+//   gotStr = document.getElementById('inStrTextbox').value;
+//   visBin(gotStr);
+// }
+
+function visBin(inputStr, boxSize, style) { //0 : normal, 1 : hachua
   for (var i = 0; i < inputStr.length; i++) {
     // console.log(inputStr.charAt(i) + " " + inputStr.charCodeAt(i).toString(2) + " " + inputStr.charCodeAt(i).toString(2).length);
     var binLength = (inputStr.charCodeAt(i).toString(2).length <= 8) ? 8 : 16;
     for (var j = 0; j < binLength; j++) {
       var x = (1.5 * j + 1) * boxSize;
       var y = (1.5 * i + 1) * boxSize;
-      scribble.scribbleRect(x, y, boxSize, boxSize);
-
       if (inputStr.charCodeAt(i).toString(2).charAt(j - binLength + inputStr.charCodeAt(i).toString(2).length) == "1") {
-        var xCoords = [x - 0.5 * boxSize, x + 0.5 * boxSize, x + 0.5 * boxSize, x - 0.5 * boxSize];
-        var yCoords = [y - 0.5 * boxSize, y - 0.5 * boxSize, y + 0.5 * boxSize, y + 0.5 * boxSize];
-        var gap = 3.5;
-        var angle = 315;
-        strokeWeight(3);
-        stroke(0, 50, 180);
-        scribble.scribbleFilling(xCoords, yCoords, gap, angle);
+        if (style == 0) {
+          noStroke();
+          fill(fillColor);
+          rectMode(CENTER);
+          rect(x, y, boxSize, boxSize)
+        } else if (style == 1) {
+          var xCoords = [x - 0.5 * boxSize, x + 0.5 * boxSize, x + 0.5 * boxSize, x - 0.5 * boxSize];
+          var yCoords = [y - 0.5 * boxSize, y - 0.5 * boxSize, y + 0.5 * boxSize, y + 0.5 * boxSize];
+          var gap = 3.5;
+          var angle = 315;
+          strokeWeight(3);
+          stroke(fillColor);
+          scribble.scribbleFilling(xCoords, yCoords, gap, angle);
+        }
       }
+      strokeWeight(5);
+      stroke(strokeColor);
+      noFill();
+      if (style == 0) {
+        rect(x, y, boxSize, boxSize)
+      } else if (style == 1) {
+        scribble.scribbleRect(x, y, boxSize, boxSize);
+      }
+
     }
   }
 
