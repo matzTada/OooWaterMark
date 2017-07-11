@@ -8,6 +8,12 @@
 * ```<div>```はブロック要素（一般的に前後に改行が入る）として，```<span>```はインライン要素（一般的に前後に改行が入らない）として使われる
 * [p5.dom library](https://github.com/processing/p5.js/wiki/Beyond-the-canvas)はなんだかんだ重要
 
+面白そうなライブラリ
+
+* <https://github.com/bitcraftlab/p5.gui>
+* <https://github.com/generative-light/p5.scribble.js>
+* <https://github.com/linux-man/p5.tiledmap>
+
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=YOUTUBE_MOVIE_ID_HERE
 " target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_MOVIE_ID_HERE/0.jpg" 
 alt="movie on youtube" width=40% border="10" /></a>  
