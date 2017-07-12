@@ -5,7 +5,7 @@ var strokeColor = '#00ddff';
 var fillColor = [180, 255, 255];
 var drawStroke = true;
 var drawFill = true;
-var radius = 20;
+var radius = 40;
 var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
 var label = 'label';
 
@@ -21,7 +21,7 @@ var scribble;
 var gotStr;
 
 var drawVisBin = true;
-var visBinStyle = [0, 1];
+var visBinStyle = ["hachure", "normal"];
 
 function setup() {
 
@@ -37,7 +37,7 @@ function setup() {
   gui.addGlobals('numShapes', 'bigRadius');
 
   // Create Shape GUI
-  gui2 = createGui('Style', width - 220, height - 500);
+  gui2 = createGui('Style', width - 220, height - 600);
   colorMode(HSB);
   sliderRange(0, 50, 1);
   gui2.addGlobals('shape', 'label', 'radius', 'drawFill', 'fillColor', 'drawVisBin', 'visBinStyle');
@@ -137,35 +137,49 @@ function draw() {
 //   visBin(gotStr);
 // }
 
-function visBin(inputStr, boxSize, style) { //0 : normal, 1 : hachua
+function visBin(inputStr, boxSize, style) { //0 : normal, 1 : hachure
   for (var i = 0; i < inputStr.length; i++) {
     // console.log(inputStr.charAt(i) + " " + inputStr.charCodeAt(i).toString(2) + " " + inputStr.charCodeAt(i).toString(2).length);
+    var x = (1.5 * 0 + 1) * boxSize;
+    var y = (1.5 * i + 1) * boxSize;
+
+    textSize(radius);
+    noStroke();
+    fill(fillColor);
+    textAlign(CENTER, CENTER);
+    var textStr = inputStr.charAt(i);
+    text(textStr, x, y);
+    // var x = (1.5 * 1 + 1) * boxSize;
+    // var textStr = inputStr.charCodeAt(i);
+    // text(textStr, x, y);   
+
     var binLength = (inputStr.charCodeAt(i).toString(2).length <= 8) ? 8 : 16;
     for (var j = 0; j < binLength; j++) {
-      var x = (1.5 * j + 1) * boxSize;
+      var x = (1.5 * j + 3) * boxSize;
       var y = (1.5 * i + 1) * boxSize;
+
       if (inputStr.charCodeAt(i).toString(2).charAt(j - binLength + inputStr.charCodeAt(i).toString(2).length) == "1") {
-        if (style == 0) {
+        if (style == "normal") {
           noStroke();
           fill(fillColor);
           rectMode(CENTER);
           rect(x, y, boxSize, boxSize)
-        } else if (style == 1) {
+        } else if (style == "hachure") {
           var xCoords = [x - 0.5 * boxSize, x + 0.5 * boxSize, x + 0.5 * boxSize, x - 0.5 * boxSize];
           var yCoords = [y - 0.5 * boxSize, y - 0.5 * boxSize, y + 0.5 * boxSize, y + 0.5 * boxSize];
           var gap = 3.5;
           var angle = 315;
-          strokeWeight(3);
+          strokeWeight(strokeWidth * 0.5);
           stroke(fillColor);
           scribble.scribbleFilling(xCoords, yCoords, gap, angle);
         }
       }
-      strokeWeight(5);
+      strokeWeight(strokeWidth);
       stroke(strokeColor);
       noFill();
-      if (style == 0) {
+      if (style == "normal") {
         rect(x, y, boxSize, boxSize)
-      } else if (style == 1) {
+      } else if (style == "hachure") {
         scribble.scribbleRect(x, y, boxSize, boxSize);
       }
 
