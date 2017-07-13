@@ -3,6 +3,7 @@ var inFillColor = '#00ffff';
 var inStrokeColor = '#00ddff';
 var outFillColor = '#c9f600';
 var outStrokeColor = '#a9cd07';
+var diffFillColor = '#FC9CA1';
 
 var radius = 40;
 var strokeWidth = 4;
@@ -41,6 +42,7 @@ function setup() {
   gui.addGlobals('inStrokeColor');
   gui.addGlobals('outFillColor');
   gui.addGlobals('outStrokeColor');
+  gui.addGlobals('diffFillColor');
 
   // Don't loop automatically
   // noLoop();
@@ -67,8 +69,9 @@ function draw() {
   var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
 
   var inputBinStr = "";
-  for(var i = 0; i < input.length; i++){
-  	inputBinStr += ('00000000' + input.charCodeAt(i).toString(2)).slice(-8);
+  for (var i = 0; i < input.length; i++) {
+    if (input.charCodeAt(i).toString(2).length > 8) inputBinStr += ('0000000000000000' + input.charCodeAt(i).toString(2)).slice(-16);
+    else inputBinStr += ('00000000' + input.charCodeAt(i).toString(2)).slice(-8);
   }
 
   textSize(radius / 2);
@@ -84,20 +87,21 @@ function draw() {
   var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
 
   var outputBinStr = "";
-  for(var i = 0; i < output.length; i++){
-  	outputBinStr += ('00000000' + output.charCodeAt(i).toString(2)).slice(-8);
+  for (var i = 0; i < output.length; i++) {
+    if (output.charCodeAt(i).toString(2).length > 8) outputBinStr += ('0000000000000000' + output.charCodeAt(i).toString(2)).slice(-16);
+    else outputBinStr += ('00000000' + output.charCodeAt(i).toString(2)).slice(-8);
   }
 
   var diffBinStr = "";
-  for(var i = 0; i < outputBinStr.length; i++){
-  	diffBinStr += (outputBinStr.charAt(i) != inputBinStr.charAt(i)) ? "1" : "0";
+  for (var i = 0; i < outputBinStr.length; i++) {
+    diffBinStr += (outputBinStr.charAt(i) != inputBinStr.charAt(i)) ? "1" : "0";
   }
 
   if (drawVisBin) {
     visBin(0, textStrHeight, inputBinStr, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
     visBin(windowWidth / 2, textStrHeight, outputBinStr, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
-    if(drawDiff) {    	
-	  visBin(windowWidth / 2, textStrHeight, diffBinStr, radius, visBinStyle, '#FC9CA1', outStrokeColor, strokeWidth)
+    if (drawDiff) {
+      visBin(windowWidth / 2, textStrHeight, diffBinStr, radius, visBinStyle, diffFillColor, outStrokeColor, strokeWidth)
     }
   }
 }
@@ -110,7 +114,7 @@ function draw() {
 function visBin(posX, posY, inputBinStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
 
   for (var j = 0; j < inputBinStr.length; j++) {
-    var x = (1.5 * (j % 8)	 + 1) * boxSize + posX;
+    var x = (1.5 * (j % 8) + 1) * boxSize + posX;
     var y = (1.5 * Math.floor(j / 8) + 1) * boxSize + posY;
 
     if (inputBinStr.charAt(j) == "1") {
