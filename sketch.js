@@ -1,134 +1,59 @@
 // gui params
-var numShapes = 20;
 var strokeWidth = 4;
 var strokeColor = '#00ddff';
 var fillColor = [180, 255, 255];
-var drawStroke = true;
-var drawFill = true;
 var radius = 40;
-var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
-var label = 'label';
+// var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
+var input = 'input';
 
 // gui
-var visible = true;
-var gui, gui2;
-
-// dynamic parameters
-var bigRadius;
+var gui;
 
 var scribble;
-
-var gotStr;
-
 var drawVisBin = true;
 var visBinStyle = ["hachure", "normal"];
 
-function setup() {
+// var gotStr;
 
+function setup() {
   var tmpCanvas = createCanvas(windowWidth, windowHeight);
   tmpCanvas.parent("p5canvas");
 
-  // Calculate big radius
-  bigRadius = height / 3.0;
-
-  // Create Layout GUI
-  gui = createGui('Layout', 20, height - 200);
-  sliderRange(0, 100, 1);
-  gui.addGlobals('numShapes', 'bigRadius');
-
   // Create Shape GUI
-  gui2 = createGui('Style', width - 220, height - 600);
+  gui = createGui('Style', width - 220, height - 600);
   colorMode(HSB);
   sliderRange(0, 50, 1);
-  gui2.addGlobals('shape', 'label', 'radius', 'drawFill', 'fillColor', 'drawVisBin', 'visBinStyle');
+  // gui.addGlobals('shape');
+  gui.addGlobals('input', 'drawVisBin', 'radius', 'fillColor', 'visBinStyle');
   sliderRange(0, 10, 0.1);
-  gui2.addGlobals('drawStroke', 'strokeColor', 'strokeWidth');
+  gui.addGlobals('strokeColor', 'strokeWidth');
 
   // Don't loop automatically
   // noLoop();
 
   scribble = new Scribble();
 
-  gotStr = "input value";
+  // gotStr = "input value";
 }
 
 
 function draw() {
+  clear(); // clear all
 
-  // clear all
-  clear();
-
-  // set fill style
-  if (drawFill) {
-    fill(fillColor);
-  } else {
-    noFill();
-  }
-
-  // set stroke style
-  if (drawStroke) {
-    stroke(strokeColor);
-    strokeWeight(strokeWidth);
-  } else {
-    noStroke();
-  }
-
-  // draw circles arranged in a circle
-  for (var i = 0; i < numShapes; i++) {
-
-    var angle = TWO_PI / numShapes * i;
-    var x = width / 2 + cos(angle) * bigRadius;
-    var y = height / 2 + sin(angle) * bigRadius;
-    var d = 2 * radius;
-
-    // pick a shape
-    switch (shape) {
-
-      case 'circle':
-        // ellipse(x, y, d, d);
-        scribble.scribbleEllipse(x, y, d, d);
-        break;
-
-      case 'square':
-        rectMode(CENTER);
-        // rect(x, y, d, d);
-        scribble.scribbleRect(x, y, d, d);
-        break;
-
-      case 'triangle':
-        ngon(3, x, y, d);
-        break;
-
-      case 'pentagon':
-        ngon(5, x, y, d);
-        break;
-
-      case 'star':
-        star(6, x, y, d / sqrt(3), d);
-        break;
-
-    }
-
-    // draw a label below the shape
-    push();
-    noStroke();
-    fill(0);
-    textAlign(CENTER);
-    text(label, x, y + radius + 15);
-    pop();
-
-  }
-
-
-  textSize(20);
+  textSize(radius / 2);
   noStroke();
   fill(fillColor);
   textAlign(LEFT, TOP);
-  var textStr = str(label) + " " + label.length;
+  var textStr = str(input) + " " + input.length + "\n";
+  for (var i = 0; i < input.length; i++) {
+  	textStr += input.charCodeAt(i).toString(2) + " ";
+  	if(i % 5 == 4) textStr += "\n";
+  }  
   text(textStr, 5, 5);
+  var textStrHeight = (textStr.split("\n").length + 1) * radius/2;
 
   if (drawVisBin) {
-    visBin(label, radius, visBinStyle);
+    visBin(0, textStrHeight, input, radius, visBinStyle);
   }
 }
 
@@ -137,11 +62,11 @@ function draw() {
 //   visBin(gotStr);
 // }
 
-function visBin(inputStr, boxSize, style) { //0 : normal, 1 : hachure
+function visBin(posX, posY, inputStr, boxSize, style) { //0 : normal, 1 : hachure
   for (var i = 0; i < inputStr.length; i++) {
     // console.log(inputStr.charAt(i) + " " + inputStr.charCodeAt(i).toString(2) + " " + inputStr.charCodeAt(i).toString(2).length);
-    var x = (1.5 * 0 + 1) * boxSize;
-    var y = (1.5 * i + 1) * boxSize;
+    var x = (1.5 * 0 + 1) * boxSize + posX;
+    var y = (1.5 * i + 1) * boxSize + posY;
 
     textSize(radius);
     noStroke();
@@ -155,8 +80,8 @@ function visBin(inputStr, boxSize, style) { //0 : normal, 1 : hachure
 
     var binLength = (inputStr.charCodeAt(i).toString(2).length <= 8) ? 8 : 16;
     for (var j = 0; j < binLength; j++) {
-      var x = (1.5 * j + 3) * boxSize;
-      var y = (1.5 * i + 1) * boxSize;
+      var x = (1.5 * j + 3) * boxSize + posX;
+      var y = (1.5 * i + 1) * boxSize + posY;
 
       if (inputStr.charCodeAt(i).toString(2).charAt(j - binLength + inputStr.charCodeAt(i).toString(2).length) == "1") {
         if (style == "normal") {
@@ -191,13 +116,9 @@ function visBin(inputStr, boxSize, style) { //0 : normal, 1 : hachure
 
 // check for keyboard events
 function keyPressed() {
+  console.log(key);
   switch (key) {
-    // type [F1] to hide / show the GUI
-    case 'p':
-      visible = !visible;
-      if (visible) gui.show();
-      else gui.hide();
-      break;
+    default: break;
   }
 }
 
@@ -227,3 +148,31 @@ function star(n, x, y, d1, d2) {
   }
   endShape(CLOSE);
 }
+
+// // pick a shape
+// switch (shape) {
+
+//   case 'circle':
+//     // ellipse(x, y, d, d);
+//     scribble.scribbleEllipse(x, y, d, d);
+//     break;
+
+//   case 'square':
+//     rectMode(CENTER);
+//     // rect(x, y, d, d);
+//     scribble.scribbleRect(x, y, d, d);
+//     break;
+
+//   case 'triangle':
+//     ngon(3, x, y, d);
+//     break;
+
+//   case 'pentagon':
+//     ngon(5, x, y, d);
+//     break;
+
+//   case 'star':
+//     star(6, x, y, d / sqrt(3), d);
+//     break;
+
+// }
