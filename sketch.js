@@ -1,10 +1,14 @@
 // gui params
-var strokeWidth = 4;
-var strokeColor = '#00ddff';
-var fillColor = [180, 255, 255];
+var inFillColor = '#00ffff';
+var inStrokeColor = '#00ddff';
+var outFillColor = '#c9f600';
+var outStrokeColor = '#a9cd07';
+
 var radius = 40;
+var strokeWidth = 4;
 // var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
 var input = 'input';
+var output = 'output';
 
 // gui
 var gui;
@@ -20,13 +24,21 @@ function setup() {
   tmpCanvas.parent("p5canvas");
 
   // Create Shape GUI
-  gui = createGui('Style', width - 220, height - 600);
+  gui = createGui('Style', width - 220, 0);
   colorMode(HSB);
-  sliderRange(0, 50, 1);
   // gui.addGlobals('shape');
-  gui.addGlobals('input', 'drawVisBin', 'radius', 'fillColor', 'visBinStyle');
+  gui.addGlobals('input');
+  gui.addGlobals('output');
+  gui.addGlobals('drawVisBin');
+  sliderRange(0, 50, 1);
+  gui.addGlobals('radius');
   sliderRange(0, 10, 0.1);
-  gui.addGlobals('strokeColor', 'strokeWidth');
+  gui.addGlobals('strokeWidth');
+  gui.addGlobals('visBinStyle');
+  gui.addGlobals('inFillColor');
+  gui.addGlobals('inStrokeColor');
+  gui.addGlobals('outFillColor');
+  gui.addGlobals('outStrokeColor');
 
   // Don't loop automatically
   // noLoop();
@@ -42,18 +54,31 @@ function draw() {
 
   textSize(radius / 2);
   noStroke();
-  fill(fillColor);
+  fill(inFillColor);
   textAlign(LEFT, TOP);
   var textStr = str(input) + " " + input.length + "\n";
   for (var i = 0; i < input.length; i++) {
-  	textStr += input.charCodeAt(i).toString(2) + " ";
-  	if(i % 5 == 4) textStr += "\n";
-  }  
+    textStr += input.charCodeAt(i).toString(2) + " ";
+    if (i % 5 == 4) textStr += "\n";
+  }
   text(textStr, 5, 5);
-  var textStrHeight = (textStr.split("\n").length + 1) * radius/2;
+  var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
+
+  textSize(radius / 2);
+  noStroke();
+  fill(inFillColor);
+  textAlign(LEFT, TOP);
+  var textStr = str(input) + " " + input.length + "\n";
+  for (var i = 0; i < input.length; i++) {
+    textStr += input.charCodeAt(i).toString(2) + " ";
+    if (i % 5 == 4) textStr += "\n";
+  }
+  text(textStr, 5, 5);
+  var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
 
   if (drawVisBin) {
-    visBin(0, textStrHeight, input, radius, visBinStyle);
+    visBin(0, textStrHeight, input, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
+    visBin(windowWidth / 2, textStrHeight, output, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
   }
 }
 
@@ -62,9 +87,8 @@ function draw() {
 //   visBin(gotStr);
 // }
 
-function visBin(posX, posY, inputStr, boxSize, style) { //0 : normal, 1 : hachure
+function visBin(posX, posY, inputStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
   for (var i = 0; i < inputStr.length; i++) {
-    // console.log(inputStr.charAt(i) + " " + inputStr.charCodeAt(i).toString(2) + " " + inputStr.charCodeAt(i).toString(2).length);
     var x = (1.5 * 0 + 1) * boxSize + posX;
     var y = (1.5 * i + 1) * boxSize + posY;
 
@@ -74,9 +98,6 @@ function visBin(posX, posY, inputStr, boxSize, style) { //0 : normal, 1 : hachur
     textAlign(CENTER, CENTER);
     var textStr = inputStr.charAt(i);
     text(textStr, x, y);
-    // var x = (1.5 * 1 + 1) * boxSize;
-    // var textStr = inputStr.charCodeAt(i);
-    // text(textStr, x, y);   
 
     var binLength = (inputStr.charCodeAt(i).toString(2).length <= 8) ? 8 : 16;
     for (var j = 0; j < binLength; j++) {
