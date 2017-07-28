@@ -93,6 +93,7 @@ function onListening() {
  added by TadaMatz
  websocket things. see https://team-lab.github.io/skillup-nodejs/3/1.html
 */
+var path = require('path');
 
 var fs = require('fs'); //added by TadaMatz file handling
 var dateUtils = require('date-utils'); //added by TadaMatz file handling
@@ -119,15 +120,59 @@ var io = require('socket.io').listen(server);
 //   });
 // });
 
-var randomWords = require('random-words');
 
+//for writing. comment this section when used in actaual program
+var randomWords = require('random-words');
 setInterval(function() {
-  var chat = {
-    name: randomWords(),
-    message: randomWords()
-  };
-  console.log('send periodical message: ' + JSON.stringify(chat));
-  io.emit('chat', chat);
+  var filename = "data.json";
+  var filelist = fs.readdirSync(JSON_FILE_DIR);
+  if (filename && filelist.includes(filename)) {
+    var filepath = path.join(JSON_FILE_DIR, filename);
+    console.log('filepath: ' + filepath);
+    var filestr = fileRead(filepath);
+    console.log(filestr);
+    var jsonObj = JSON.parse(filestr);
+    jsonObj.updatecount += 1;
+    var dt = new Date();
+    var formatted = dt.toFormat("YYYY-MM-DDTHH24:MI:SS");
+    jsonObj.updatetime = formatted;
+    var result = fileWrite(filepath, JSON.stringify(jsonObj, undefined, 2));
+    if (result) { //succeed in read file and has contents
+      console.log('succeed in write file: ' + filepath);
+    } else {
+      console.log("error in write file: " + filepath);
+    }
+  }
+}, 1000);
+
+//for reading
+setInterval(function() {
+  var filename = "data.json";
+  var filelist = fs.readdirSync(JSON_FILE_DIR);
+  if (filename && filelist.includes(filename)) {
+    var filepath = path.join(JSON_FILE_DIR, filename);
+    console.log('filepath: ' + filepath);
+    var filestr = fileRead(filepath);
+    console.log(filestr);
+    // var returnObj = {
+    //   "filepath": filepath,
+    //   "filestr": JSON.parse(filestr)
+    // }
+    var returnObj = JSON.parse(filestr);
+    var returnStr = JSON.stringify(returnObj);
+    console.log(returnStr);
+    if (returnStr) { //succeed in read file and has contents
+      console.log("send data");
+      // var chat = {
+      //   before: randomWords(),
+      //   after: randomWords()
+      // };
+      console.log('send periodical message: ' + JSON.stringify(returnObj));
+      io.emit('chat', returnObj);
+    } else {
+      console.log("error or no data");
+    }
+  }
 }, 1000);
 
 //file handling functions
