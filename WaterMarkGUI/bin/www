@@ -103,21 +103,21 @@ var JSON_FILE_DIR = process.env.JSON_FILE_DIR;
 
 var io = require('socket.io').listen(server);
 
-io.sockets.on('connection', function(socket) {
-  //check connection id
-  console.log('connected', socket.id);
+// io.sockets.on('connection', function(socket) {
+//   //check connection id
+//   console.log('connected', socket.id);
 
-  // echo back contents to all clientes when receive event calle "chat"
-  socket.on('chat', function(chat) {
-    console.log('message : ' + chat.message);
-    io.emit('chat', chat);
-  });
+//   // echo back contents to all clientes when receive event calle "chat"
+//   socket.on('chat', function(chat) {
+//     console.log('message : ' + chat.message);
+//     io.emit('chat', chat);
+//   });
 
-  // when connection is broken
-  socket.on('disconnect', function() {
-    console.log('disconnect');
-  });
-});
+//   // when connection is broken
+//   socket.on('disconnect', function() {
+//     console.log('disconnect');
+//   });
+// });
 
 setInterval(function() {
   var chat = {

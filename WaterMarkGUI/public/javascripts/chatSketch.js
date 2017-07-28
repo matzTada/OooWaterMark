@@ -2,38 +2,38 @@ var socket = io();
 
 // add contents to HTML element when receive event called "chat"
 socket.on('chat', function(chat) {
-  var messages = document.getElementById('messages');
+  // var messages = document.getElementById('messages');
   // display new message upper than exsiting elements
-  var newMessage = document.createElement('li');
-  newMessage.textContent = chat.name + ' "' + chat.message + '"';
-  messages.insertBefore(newMessage, messages.firstChild);
+  // var newMessage = document.createElement('li');
+  // newMessage.textContent = chat.name + ' "' + chat.message + '"';
+  // messages.insertBefore(newMessage, messages.firstChild);
 
   //added for processing.js visualizing
   input = chat.name;
   output = chat.message;
 });
 
-// define event on send button
-var sendButton = document.getElementById('send');
-sendButton.addEventListener('click', sendMessage);
+// // define event on send button
+// var sendButton = document.getElementById('send');
+// sendButton.addEventListener('click', sendMessage);
 
 // send message
-function sendMessage() {
-  // get name and contents
-  var nameElement = document.getElementById('name');
-  var messageElement = document.getElementById('text');
-  var name = nameElement.value;
-  var message = messageElement.value;
+// function sendMessage() {
+//   // get name and contents
+//   var nameElement = document.getElementById('name');
+//   var messageElement = document.getElementById('text');
+//   var name = nameElement.value;
+//   var message = messageElement.value;
 
-  // send event called chat
-  socket.emit('chat', {
-    name:name,
-    message:message
-  });
+//   // send event called chat
+//   socket.emit('chat', {
+//     name:name,
+//     message:message
+//   });
 
-  // reset value
-  messageElement.value = '';
-}
+//   // reset value
+//   messageElement.value = '';
+// }
 
 
 // gui params
