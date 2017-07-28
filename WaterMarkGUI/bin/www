@@ -89,10 +89,17 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-/*
+/* 
  added by TadaMatz
  websocket things. see https://team-lab.github.io/skillup-nodejs/3/1.html
 */
+
+var fs = require('fs'); //added by TadaMatz file handling
+var dateUtils = require('date-utils'); //added by TadaMatz file handling
+
+//initialize
+var JSON_FILE_DIR = process.env.JSON_FILE_DIR;
+// var JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
 
 var io = require('socket.io').listen(server);
 
@@ -111,3 +118,45 @@ io.sockets.on('connection', function(socket) {
     console.log('disconnect');
   });
 });
+
+setInterval(function() {
+  var chat = {
+    name: "perman",
+    message: "period"
+  };
+  console.log('send periodical message: ' + chat);
+  io.emit('chat', chat);
+}, 1000);
+
+//file handling functions
+function fileCheck(filePath) {
+  var isExist = false;
+  try {
+    fs.statSync(filePath, { encoding: 'utf8' });
+    console.log(true);
+    return true;
+  } catch (err) {
+    console.log(false);
+    return false;
+  }
+  return isExist;
+}
+
+function fileRead(filePath) {
+  var content = new String();
+  if (fileCheck(filePath)) {;
+    content = fs.readFileSync(filePath, { encoding: 'utf8' });
+    console.log('finish read file');
+  }
+  return content;
+};
+
+function fileWrite(filePath, stream) {
+  var result = false;
+  try {
+    fs.writeFileSync(filePath, stream);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
