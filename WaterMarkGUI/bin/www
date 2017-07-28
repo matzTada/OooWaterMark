@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('sockettest:server');
+var debug = require('debug')('watermarkgui:server');
 var http = require('http');
 
 /**
