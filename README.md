@@ -3,17 +3,18 @@
 特にp5.jsとか使っちゃう系
 一応電子透かしのデモに使用予定
 
+## To Do
+
+* Web serverを立てる
+* Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>
+	* Serure WebSocket(wss)を使うべきなのかも？
+
 ## files
 
 * ```/WaterMarkGUI/bin/www``` : server side program mainly for websocket
 * ```/WaterMarkGUI/app.js``` : server side program mainly for frontend
 * ```/WaterMarkGUI/views/index.ejs``` : client side script
 * ```/WaterMarkGui/public/javascripts/chatSketch.js``` : client side program mainly for websocket and processing.js
-
-## To Do
-
-* Web serverを立てる
-* Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>
 
 ## Info.
 
