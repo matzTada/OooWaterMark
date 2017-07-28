@@ -132,6 +132,8 @@ setInterval(function() {
     var filestr = fileRead(filepath);
     console.log(filestr);
     var jsonObj = JSON.parse(filestr);
+    jsonObj.before = randomWords();
+    jsonObj.after = randomWords();
     jsonObj.updatecount += 1;
     var dt = new Date();
     var formatted = dt.toFormat("YYYY-MM-DDTHH24:MI:SS");
