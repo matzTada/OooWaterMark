@@ -1,6 +1,6 @@
 if [ -z "${PORT+x}" ] ; then #if PORT is not defined, define.
   echo "PORT was not defined before, define PORT"
-  export PORT=3000 #change here if you start express app without Docker
+  export PORT=3333 #change here if you start express app without Docker
 fi
 echo "PORT: $PORT"
 
