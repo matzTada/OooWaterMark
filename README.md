@@ -3,6 +3,13 @@
 特にp5.jsとか使っちゃう系
 一応電子透かしのデモに使用予定
 
+## files
+
+* ```/WaterMarkGUI/bin/www``` : server side program mainly for websocket
+* ```/WaterMarkGUI/app.js``` : server side program mainly for frontend
+* ```/WaterMarkGUI/views/index.ejs``` : client side script
+* ```/WaterMarkGui/public/javascripts/chatSketch.js``` : client side program mainly for websocket and processing.js
+
 ## To Do
 
 * Web serverを立てる
