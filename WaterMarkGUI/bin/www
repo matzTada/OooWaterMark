@@ -119,12 +119,14 @@ var io = require('socket.io').listen(server);
 //   });
 // });
 
+var randomWords = require('random-words');
+
 setInterval(function() {
   var chat = {
-    name: "perman",
-    message: "period"
+    name: randomWords(),
+    message: randomWords()
   };
-  console.log('send periodical message: ' + chat);
+  console.log('send periodical message: ' + JSON.stringify(chat));
   io.emit('chat', chat);
 }, 1000);
 

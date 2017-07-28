@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html>
-  <%- include('header') -%>
-  <body>
-    <h1><%= title %></h1>
-<!--     <label for='name'>name</label>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel="stylesheet" href="/stylesheet/style.css">
+</head>
+
+<body>
+  <h1><%= title %></h1>
+  <!--     <label for='name'>name</label>
     <input id='name' type='text' name='text'/>
     <label for='text'>content</label>
     <input id='text' type='text' name='text'/>
     <input id='send' type='button' value='送信'/> -->
+  <!-- <ul id='messages'></ul> -->
+  <!-- p5 canpus for processing.js -->
+  <div id="p5canvas"></div>
+</body>
+<script src='/socket.io/socket.io.js'></script>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
+<script src="javascripts/libraries/quicksettings.js"></script>
+<script src="javascripts/libraries/p5.gui.js"></script>
+<script src="javascripts/libraries/p5.scribble.js"></script>
+<script src="javascripts/libraries/p5.tiledmap.min.js"></script>
+<!-- <script src='javascripts/chat.js'></script> -->
+<!-- <script src="javascripts/sketch.js"></script>   -->
+<script src='javascripts/chatSketch.js'></script>
 
-    <!-- <ul id='messages'></ul> -->
-
-    <!-- p5 canpus for processing.js -->
-    <div id="p5canvas"></div>
-  </body>
-  <script src='/socket.io/socket.io.js'></script>
-
-  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js"></script>
-  <script src="javascripts/libraries/quicksettings.js"></script>
-  <script src="javascripts/libraries/p5.gui.js"></script>
-  <script src="javascripts/libraries/p5.scribble.js"></script>
-  <script src="javascripts/libraries/p5.tiledmap.min.js"></script>
-  <!-- <script src='javascripts/chat.js'></script> -->
-  <!-- <script src="javascripts/sketch.js"></script>   -->
-  <script src='javascripts/chatSketch.js'></script>
 </html>
