@@ -13,11 +13,11 @@ socket.on('chat', function(chat) {
   // output = chat.after;
   input = chat.extract_bits;
   output = chat.detected_watermark;
-  dict = chat.data_list;
+  jsonDataDict = chat.data_list;
 
   // console.log("received data");
-  // for (i in dict){
-  //   console.log(dict[i]);    
+  // for (i in jsonDataDict){
+  //   console.log(jsonDataDict[i]);    
   // }
 });
 
@@ -56,7 +56,7 @@ var strokeWidth = 4;
 // var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
 var input = 'input';
 var output = 'output';
-var dict = [];
+var jsonDataDict = [];
 
 // gui
 var gui;
@@ -103,24 +103,27 @@ function setup() {
 function draw() {
   clear(); // clear all
 
+  //input extract_bits left
   textSize(radius / 2);
   noStroke();
   fill(inFillColor);
   textAlign(LEFT, TOP);
   var textStr = str(input) + " " + input.length + "\n";
-  for (var i = 0; i < input.length; i++) {
-    textStr += input.charCodeAt(i).toString(2) + " ";
-    if (i % 5 == 4) textStr += "\n";
-  }
   text(textStr, 5, 5);
-  var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
+  // for (var i = 0; i < input.length; i++) {
+  //   textStr += input.charCodeAt(i).toString(2) + " ";
+  //   if (i % 5 == 4) textStr += "\n";
+  // }
+  // text(textStr, 5, 5);
+  // var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
 
-  var inputBinStr = "";
-  for (var i = 0; i < input.length; i++) {
-    if (input.charCodeAt(i).toString(2).length > 8) inputBinStr += ('0000000000000000' + input.charCodeAt(i).toString(2)).slice(-16);
-    else inputBinStr += ('00000000' + input.charCodeAt(i).toString(2)).slice(-8);
-  }
+  // var inputBinStr = "";
+  // for (var i = 0; i < input.length; i++) {
+  //   if (input.charCodeAt(i).toString(2).length > 8) inputBinStr += ('0000000000000000' + input.charCodeAt(i).toString(2)).slice(-16);
+  //   else inputBinStr += ('00000000' + input.charCodeAt(i).toString(2)).slice(-8);
+  // }
 
+  //output detected_watermark
   textSize(radius / 2);
   noStroke();
   fill(outFillColor);
@@ -139,18 +142,21 @@ function draw() {
     else outputBinStr += ('00000000' + output.charCodeAt(i).toString(2)).slice(-8);
   }
 
-  var diffBinStr = "";
-  for (var i = 0; i < outputBinStr.length; i++) {
-    diffBinStr += (outputBinStr.charAt(i) != inputBinStr.charAt(i)) ? "1" : "0";
-  }
+  // var diffBinStr = "";
+  // for (var i = 0; i < outputBinStr.length; i++) {
+  //   diffBinStr += (outputBinStr.charAt(i) != inputBinStr.charAt(i)) ? "1" : "0";
+  // }
 
   if (drawVisBin) {
-    visBin(0, textStrHeight, inputBinStr, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
+    // visBin(0, textStrHeight, inputBinStr, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
     visBin(windowWidth / 2, textStrHeight, outputBinStr, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
-    if (drawDiff) {
-      visBin(windowWidth / 2, textStrHeight, diffBinStr, radius, visBinStyle, diffFillColor, outStrokeColor, strokeWidth)
-    }
+    // if (drawDiff) {
+    //   visBin(windowWidth / 2, textStrHeight, diffBinStr, radius, visBinStyle, diffFillColor, outStrokeColor, strokeWidth)
+    // }
   }
+
+  //jsonDataDict left
+  drawBars(50, 50, jsonDataDict, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
 }
 
 // function getValue(){
@@ -158,7 +164,48 @@ function draw() {
 //   visBin(gotStr);
 // }
 
+function drawBars(posX, posY, dict, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+  rectMode(CORNER);
+  for (var j in dict) {
+    var w = boxSize * 10 * dict[j];
+    var h = boxSize / 3;
+    var x = boxSize + posX;
+    var y = 1.5 * j * h + posY;
+
+    fill(fillColor);
+    textSize(h/2);
+    text(input.charAt(j) + "     " + dict[j], x - 2 * boxSize, y);
+
+    if(input.charAt(j) == '1'){
+      if (style == "normal") {
+        noStroke();
+        fill(fillColor);
+        rect(x, y, w, h)
+      } else if (style == "hachure") {
+        var xCoords = [x, x + w, x + w, x];
+        var yCoords = [y, y, y + h, y + h];
+        var gap = 3.5;
+        var angle = 315;
+        strokeWeight(strokeWidth * 0.5);
+        stroke(fillColor);
+        scribble.scribbleFilling(xCoords, yCoords, gap, angle);
+      }
+    }
+    
+    strokeWeight(strokeWidth);
+    stroke(strokeColor);
+    noFill();
+    if (style == "normal") {
+      rect(x, y, w, h)
+    } else if (style == "hachure") {
+      scribble.scribbleRect(x + w / 2, y + h / 2, w, h);
+    }
+
+  }
+}
+
 function visBin(posX, posY, inputBinStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+  rectMode(CENTER);
 
   for (var j = 0; j < inputBinStr.length; j++) {
     var x = (1.5 * (j % 8) + 1) * boxSize + posX;
@@ -168,7 +215,6 @@ function visBin(posX, posY, inputBinStr, boxSize, style, fillColor, strokeColor,
       if (style == "normal") {
         noStroke();
         fill(fillColor);
-        rectMode(CENTER);
         rect(x, y, boxSize, boxSize)
       } else if (style == "hachure") {
         var xCoords = [x - 0.5 * boxSize, x + 0.5 * boxSize, x + 0.5 * boxSize, x - 0.5 * boxSize];
