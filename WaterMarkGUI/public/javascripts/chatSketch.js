@@ -11,8 +11,14 @@ socket.on('chat', function(chat) {
   //added for processing.js visualizing
   // input = chat.before;
   // output = chat.after;
-    input = chat.extract_bits;
+  input = chat.extract_bits;
   output = chat.detected_watermark;
+  dict = chat.data_list;
+
+  // console.log("received data");
+  // for (i in dict){
+  //   console.log(dict[i]);    
+  // }
 });
 
 // // define event on send button
@@ -50,6 +56,7 @@ var strokeWidth = 4;
 // var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
 var input = 'input';
 var output = 'output';
+var dict = [];
 
 // gui
 var gui;

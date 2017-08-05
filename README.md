@@ -3,6 +3,15 @@
 特にp5.jsとか使っちゃう系
 一応電子透かしのデモに使用予定
 
+## ざっくりと
+
+* サーバー側
+	* 同じホストのJSONファイルを読んでwebsocketを用いてクライアントに送る
+	* Node, Express
+* クライアント側
+	* JSONをwebsocket経由で受信してブラウザ上で表示する
+	* JavaScript, HTML
+
 ## To Do
 
 * Web serverを立てる
