@@ -9,8 +9,10 @@ socket.on('chat', function(chat) {
   // messages.insertBefore(newMessage, messages.firstChild);
 
   //added for processing.js visualizing
-  input = chat.before;
-  output = chat.after;
+  // input = chat.before;
+  // output = chat.after;
+    input = chat.extract_bits;
+  output = chat.detected_watermark;
 });
 
 // // define event on send button
