@@ -16,9 +16,11 @@
 
 ## To Do
 
-* Web serverを立てる
-* Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>
-	* Serure WebSocket(wss)を使うべきなのかも？
+* htmlから読めるようにしたほうがいいかも?
+* html作成機を作る？（NUCが止まっちゃったときのデモ用，テスト用）
+* ~~Web serverを立てる~~
+* ~~Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>~~
+	* (動いたので，やってない)~~Serure WebSocket(wss)を使うべきなのかも？~~
 
 ## files
 
