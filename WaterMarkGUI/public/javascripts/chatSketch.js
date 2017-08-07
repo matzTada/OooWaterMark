@@ -165,9 +165,13 @@ function draw() {
 // }
 
 function drawBars(posX, posY, dict, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+  var maxValue = 0;
+  for (var j in dict) { //get maximum value in dict
+    if (maxValue < dict[j]) maxValue = dict[j];
+  }
   rectMode(CORNER);
   for (var j in dict) {
-    var w = boxSize / 10 * dict[j];
+    var w = boxSize * 10 * dict[j] / maxValue;
     var h = boxSize / 3;
     var x = boxSize + posX;
     var y = 1.5 * j * h + posY;
