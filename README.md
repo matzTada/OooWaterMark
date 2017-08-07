@@ -3,11 +3,24 @@
 特にp5.jsとか使っちゃう系
 一応電子透かしのデモに使用予定
 
+[BitCharDiff](https://github.com/matzTada/BitCharDiff)をもとにしてます．
+
+## ざっくりと
+
+* サーバー側
+	* 同じホストのJSONファイルを読んでwebsocketを用いてクライアントに送る
+	* Node, Express
+* クライアント側
+	* JSONをwebsocket経由で受信してブラウザ上で表示する
+	* JavaScript, HTML
+
 ## To Do
 
-* Web serverを立てる
-* Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>
-	* Serure WebSocket(wss)を使うべきなのかも？
+* htmlから読めるようにしたほうがいいかも?
+* html作成機を作る？（NUCが止まっちゃったときのデモ用，テスト用）
+* ~~Web serverを立てる~~
+* ~~Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>~~
+	* (動いたので，やってない)~~Serure WebSocket(wss)を使うべきなのかも？~~
 
 ## files
 
