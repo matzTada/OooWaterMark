@@ -167,7 +167,7 @@ function draw() {
 function drawBars(posX, posY, dict, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
   rectMode(CORNER);
   for (var j in dict) {
-    var w = boxSize * 10 * dict[j];
+    var w = boxSize / 10 * dict[j];
     var h = boxSize / 3;
     var x = boxSize + posX;
     var y = 1.5 * j * h + posY;
