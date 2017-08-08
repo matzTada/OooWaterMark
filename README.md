@@ -5,6 +5,37 @@
 
 [BitCharDiff](https://github.com/matzTada/BitCharDiff)をもとにしてます．
 
+## How-To
+
+動かし方，全体の構成は[WestlabGCTCGUI](https://github.com/matzTada/WestlabGCTCGUI#how-to)と似てます．
+```/bin/www```にサーバー側の処理が書いてあります．  
+指定したディレクトリの```output.json```という名前のファイルを読んで，websocketで定期送信します．  
+
+### with Docker
+* 本番はこっちを使う
+* application起動(docker imageのbuildとdocker containerのrun) 
+```
+cd OooWaterMark/docker
+bash launchContainer.sh
+```
+* 設定変更(portとjsonファイルの場所)
+	* ```OooWaterMark/docker/launchContainer.sh```を書き換えてください.
+	* ```GUI_PORT``` : gui用のport
+	* ```JSON_DIR``` : 各アプリケーションの設定が書かれたJSONファイルが入っているディレクトリの変更
+* Raspberry Piでも[Hypriotのrpi用nodeイメージ](https://hub.docker.com/r/hypriot/rpi-node/)を使えば動くことを確認しました．
+
+### without Docker
+* frontendのテストをするならこちらが便利．
+* application起動(express applicationの起動)
+```
+cd OooWaterMark/WaterMarkGUI/
+bash start.sh
+```
+* 設定変更(portとjsonファイルの場所)
+	* ```OooWaterMark/WaterMarkGUI/start.sh```を書き換えてください(```#change here if you start express app without Docker```)と書いてあるところを変える．
+	* ```PORT``` : gui用のport
+	* ```JSON_FILE_DIR``` : 各アプリケーションの設定が書かれたJSONファイルが入っているディレクトリの変更
+
 ## ざっくりと
 
 * サーバー側
