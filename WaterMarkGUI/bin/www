@@ -104,20 +104,20 @@ var dateUtils = require('date-utils'); //added by TadaMatz file handling
 
 //initialize
 var JSON_FILE_DIR = process.env.JSON_FILE_DIR; // var JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
+var PREV_FILE_NAME = process.env.PREV_FILE_NAME;
+var AFTER_FILE_NAME = process.env.AFTER_FILE_NAME;
 
 var io = require('socket.io').listen(server); //set web socket's server
 
 //read file and send message in the file by websocket
-setInterval(function(){sendReadJson('output.json', 'after')}, 1000);
-setInterval(function(){sendReadJson('output_prev.json', 'prev')}, 1000);
+setInterval(function(){sendReadJson(PREV_FILE_NAME, 'prev')}, 1000);
+setInterval(function(){sendReadJson(AFTER_FILE_NAME, 'after')}, 1000);
 
 /*
  support functions
 */
 
 function sendReadJson(filename, eventname){
-  // var filename = "output.json";
-  // var eventname = "chat";
   var filelist = fs.readdirSync(JSON_FILE_DIR);
   if (filename && filelist.includes(filename)) {
     var filepath = path.join(JSON_FILE_DIR, filename);
