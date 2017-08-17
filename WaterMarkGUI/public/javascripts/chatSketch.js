@@ -1,62 +1,14 @@
+//communication 
 var socket = io();
 
-// add contents to HTML element when receive event called "chat"
-socket.on('after', function(chat) {
-  // var messages = document.getElementById('messages');
-  // display new message upper than exsiting elements
-  // var newMessage = document.createElement('li');
-  // newMessage.textContent = chat.name + ' "' + chat.message + '"';
-  // messages.insertBefore(newMessage, messages.firstChild);
+var afterEbit = 'afterEbit';
+var afterWmark = 'afterWmark';
+var afterDlist = [];
 
-  //added for processing.js visualizing
-  // input = chat.before;
-  // output = chat.after;
-  input = chat.extract_bits;
-  output = chat.detected_watermark;
-  jsonDataDict = chat.data_list;
+var prevEbit = 'prevEbit';
+var prevWmark = 'prevWmark';
+var prevDlist = [];
 
-  // console.log("received data");
-  // for (i in jsonDataDict){
-  //   console.log(jsonDataDict[i]);    
-  // }
-});
-
-// // define event on send button
-// var sendButton = document.getElementById('send');
-// sendButton.addEventListener('click', sendMessage);
-
-// send message
-// function sendMessage() {
-//   // get name and contents
-//   var nameElement = document.getElementById('name');
-//   var messageElement = document.getElementById('text');
-//   var name = nameElement.value;
-//   var message = messageElement.value;
-
-//   // send event called chat
-//   socket.emit('chat', {
-//     name:name,
-//     message:message
-//   });
-
-//   // reset value
-//   messageElement.value = '';
-// }
-
-
-// gui params
-var inFillColor = '#00ffff';
-var inStrokeColor = '#00ddff';
-var outFillColor = '#c9f600';
-var outStrokeColor = '#a9cd07';
-var diffFillColor = '#FC9CA1';
-
-var radius = 40;
-var strokeWidth = 4;
-// var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
-var input = 'input';
-var output = 'output';
-var jsonDataDict = [];
 
 // gui
 var gui;
@@ -66,7 +18,31 @@ var drawVisBin = true;
 var drawDiff = true;
 var visBinStyle = ["normal", "hachure"];
 
-// var gotStr;
+var inFillColor = '#00ffff';
+var inStrokeColor = '#00ddff';
+var outFillColor = '#c9f600';
+var outStrokeColor = '#a9cd07';
+var diffFillColor = '#FC9CA1';
+
+var radius = 40;
+var strokeWidth = 2;
+// var shape = ['circle', 'triangle', 'square', 'pentagon', 'star'];
+
+// add contents to HTML element when receive event called "chat"
+socket.on('after', function(chat) {
+  //added for processing.js visualizing
+  afterEbit = chat.extract_bits;
+  afterWmark = chat.detected_watermark;
+  afterDlist = chat.data_list;
+});
+
+socket.on('prev', function(chat) {
+  //added for processing.js visualizing
+  prevEbit = chat.extract_bits;
+  prevWmark = chat.detected_watermark;
+  prevDlist = chat.data_list;
+});
+
 
 function setup() {
   var tmpCanvas = createCanvas(windowWidth, windowHeight);
@@ -76,8 +52,6 @@ function setup() {
   gui = createGui('Style', width - 220, 0);
   colorMode(HSB);
   // gui.addGlobals('shape');
-  gui.addGlobals('input');
-  gui.addGlobals('output');
   gui.addGlobals('drawVisBin');
   gui.addGlobals('drawDiff');
   sliderRange(0, 50, 1);
@@ -95,92 +69,83 @@ function setup() {
   // noLoop();
 
   scribble = new Scribble();
-
-  // gotStr = "input value";
 }
 
 
 function draw() {
   clear(); // clear all
 
-  //input extract_bits left
-  textSize(radius / 2);
-  noStroke();
-  fill(inFillColor);
-  textAlign(LEFT, TOP);
-  var textStr = str(input) + " " + input.length + "\n";
-  text(textStr, 5, 5);
-  // for (var i = 0; i < input.length; i++) {
-  //   textStr += input.charCodeAt(i).toString(2) + " ";
+  // //afterEbit extract_bits left
+  // textSize(radius / 2);
+  // noStroke();
+  // fill(inFillColor);
+  // textAlign(LEFT, TOP);
+  // var textStr = str(afterEbit) + " " + afterEbit.length + "\n";
+  // text(textStr, 5, 5);
+
+  // //watermark detected_watermark
+  // textSize(radius / 2);
+  // noStroke();
+  // fill(outFillColor);
+  // textAlign(LEFT, TOP);
+  // var textStr = str(afterWmark) + " " + afterWmark.length + "\n";
+  // for (var i = 0; i < afterWmark.length; i++) {
+  //   textStr += afterWmark.charCodeAt(i).toString(2) + " ";
   //   if (i % 5 == 4) textStr += "\n";
   // }
-  // text(textStr, 5, 5);
+  // text(textStr, 5 + windowWidth / 2, 5);
   // var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
 
-  // var inputBinStr = "";
-  // for (var i = 0; i < input.length; i++) {
-  //   if (input.charCodeAt(i).toString(2).length > 8) inputBinStr += ('0000000000000000' + input.charCodeAt(i).toString(2)).slice(-16);
-  //   else inputBinStr += ('00000000' + input.charCodeAt(i).toString(2)).slice(-8);
+  // var afterWmarkBinStr = "";
+  // for (var i = 0; i < afterWmark.length; i++) {
+  //   if (afterWmark.charCodeAt(i).toString(2).length > 8) afterWmarkBinStr += ('0000000000000000' + afterWmark.charCodeAt(i).toString(2)).slice(-16);
+  //   else afterWmarkBinStr += ('00000000' + afterWmark.charCodeAt(i).toString(2)).slice(-8);
   // }
 
-  //output detected_watermark
-  textSize(radius / 2);
-  noStroke();
-  fill(outFillColor);
-  textAlign(LEFT, TOP);
-  var textStr = str(output) + " " + output.length + "\n";
-  for (var i = 0; i < output.length; i++) {
-    textStr += output.charCodeAt(i).toString(2) + " ";
-    if (i % 5 == 4) textStr += "\n";
-  }
-  text(textStr, 5 + windowWidth / 2, 5);
-  var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
+  // visBin(windowWidth / 2, textStrHeight, afterWmarkBinStr, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
 
-  var outputBinStr = "";
-  for (var i = 0; i < output.length; i++) {
-    if (output.charCodeAt(i).toString(2).length > 8) outputBinStr += ('0000000000000000' + output.charCodeAt(i).toString(2)).slice(-16);
-    else outputBinStr += ('00000000' + output.charCodeAt(i).toString(2)).slice(-8);
-  }
-
-  // var diffBinStr = "";
-  // for (var i = 0; i < outputBinStr.length; i++) {
-  //   diffBinStr += (outputBinStr.charAt(i) != inputBinStr.charAt(i)) ? "1" : "0";
-  // }
-
-  if (drawVisBin) {
-    // visBin(0, textStrHeight, inputBinStr, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
-    visBin(windowWidth / 2, textStrHeight, outputBinStr, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
-    // if (drawDiff) {
-    //   visBin(windowWidth / 2, textStrHeight, diffBinStr, radius, visBinStyle, diffFillColor, outStrokeColor, strokeWidth)
-    // }
-  }
-
-  //jsonDataDict left
-  drawBars(50, 50, jsonDataDict, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
+  drawBars(
+    10, 
+    0, 
+    windowWidth * 0.8, 
+    windowHeight * 0.40, 
+    afterDlist, afterEbit, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
+  drawBars(
+    10, 
+    0 + windowHeight * 0.45, 
+    windowWidth * 0.8, 
+    windowHeight * 0.40, 
+    prevDlist, prevEbit, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
 }
 
-// function getValue(){
-//   gotStr = document.getElementById('inStrTextbox').value;
-//   visBin(gotStr);
-// }
+function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+  stroke(strokeColor);
+  rect(posX, posY, posW, posH)
+  noStroke;
 
-function drawBars(posX, posY, dict, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
   var maxValue = 0;
-  for (var j in dict) { //get maximum value in dict
-    if (maxValue < dict[j]) maxValue = dict[j];
+  for (var j in list) { //get maximum value in list
+    if (maxValue < list[j]) maxValue = list[j];
   }
+
   rectMode(CORNER);
-  for (var j in dict) {
-    var w = boxSize * 10 * dict[j] / maxValue;
-    var h = boxSize / 3;
-    var x = boxSize + posX;
-    var y = 1.5 * j * h + posY;
+  for (var j in list) {
+    var w = posW / (list.length * 1.5);
+    var h = posH * 0.95 * list[j] / maxValue;
+    var x = (1.5 * j + 0.25) * w + posX;
+    var y = posY + (posH - h);
 
+    //text
+    noStroke();
     fill(fillColor);
-    textSize(h/2);
-    text(input.charAt(j) + "     " + dict[j], x - 2 * boxSize, y);
+    textSize(w/2);
+    textAlign(CENTER, BOTTOM);
+    text(list[j], x + w / 2, y);
+    textAlign(CENTER, TOP);
+    text(ebit.charAt(j), x + w / 2, y + h);
 
-    if(input.charAt(j) == '1'){
+    //fill
+    if(ebit.charAt(j) == '1'){
       if (style == "normal") {
         noStroke();
         fill(fillColor);
@@ -196,6 +161,7 @@ function drawBars(posX, posY, dict, boxSize, style, fillColor, strokeColor, stro
       }
     }
     
+    //rect
     strokeWeight(strokeWidth);
     stroke(strokeColor);
     noFill();
@@ -208,14 +174,14 @@ function drawBars(posX, posY, dict, boxSize, style, fillColor, strokeColor, stro
   }
 }
 
-function visBin(posX, posY, inputBinStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+function visBin(posX, posY, afterEbitBinStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
   rectMode(CENTER);
 
-  for (var j = 0; j < inputBinStr.length; j++) {
+  for (var j = 0; j < afterEbitBinStr.length; j++) {
     var x = (1.5 * (j % 8) + 1) * boxSize + posX;
     var y = (1.5 * Math.floor(j / 8) + 1) * boxSize + posY;
 
-    if (inputBinStr.charAt(j) == "1") {
+    if (afterEbitBinStr.charAt(j) == "1") {
       if (style == "normal") {
         noStroke();
         fill(fillColor);
