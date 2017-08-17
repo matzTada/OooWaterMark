@@ -114,7 +114,7 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
   // noStroke;
 
   var dataSize = 32;
-  //var dataSize = list.length;
+  // var dataSize = list.length;
 
   var maxValue = 0;
   //get maximum value in list
@@ -134,7 +134,7 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
     fill(fillColor);
     textSize(w / 2);
     textAlign(CENTER, BOTTOM);
-    text(list[j], x + w / 2, y);
+    text(String(list[j]), x + w / 2, y);
     textAlign(CENTER, TOP);
     text(ebit.charAt(j), x + w / 2, y + h);
 

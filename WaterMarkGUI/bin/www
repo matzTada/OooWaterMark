@@ -103,24 +103,25 @@ var fs = require('fs'); //added by TadaMatz file handling
 var dateUtils = require('date-utils'); //added by TadaMatz file handling
 
 //initialize
-var JSON_FILE_DIR = process.env.JSON_FILE_DIR; // var JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
+var PREV_JSON_FILE_DIR = process.env.PREV_JSON_FILE_DIR; // var PREV_JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
 var PREV_FILE_NAME = process.env.PREV_FILE_NAME;
+var AFTER_JSON_FILE_DIR = process.env.AFTER_JSON_FILE_DIR; // var AFTER_JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
 var AFTER_FILE_NAME = process.env.AFTER_FILE_NAME;
 
 var io = require('socket.io').listen(server); //set web socket's server
 
 //read file and send message in the file by websocket
-setInterval(function(){sendReadJson(PREV_FILE_NAME, 'prev')}, 1000);
-setInterval(function(){sendReadJson(AFTER_FILE_NAME, 'after')}, 1000);
+setInterval(function(){sendReadJson(PREV_JSON_FILE_DIR, PREV_FILE_NAME, 'prev')}, 1000);
+setInterval(function(){sendReadJson(AFTER_JSON_FILE_DIR, AFTER_FILE_NAME, 'after')}, 1000);
 
 /*
  support functions
 */
 
-function sendReadJson(filename, eventname){
-  var filelist = fs.readdirSync(JSON_FILE_DIR);
+function sendReadJson(filedir, filename, eventname){
+  var filelist = fs.readdirSync(filedir);
   if (filename && filelist.includes(filename)) {
-    var filepath = path.join(JSON_FILE_DIR, filename);
+    var filepath = path.join(filedir, filename);
     var filestr = fileRead(filepath);
     var returnObj = JSON.parse(filestr);
     var returnStr = JSON.stringify(returnObj);
