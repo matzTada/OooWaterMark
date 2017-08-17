@@ -1,7 +1,7 @@
 var socket = io();
 
 // add contents to HTML element when receive event called "chat"
-socket.on('chat', function(chat) {
+socket.on('after', function(chat) {
   // var messages = document.getElementById('messages');
   // display new message upper than exsiting elements
   // var newMessage = document.createElement('li');

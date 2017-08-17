@@ -90,92 +90,52 @@ function onListening() {
 }
 
 /* 
+
+ main process
+
  added by TadaMatz
  websocket things. see https://team-lab.github.io/skillup-nodejs/3/1.html
 */
+
 var path = require('path');
 
 var fs = require('fs'); //added by TadaMatz file handling
 var dateUtils = require('date-utils'); //added by TadaMatz file handling
 
 //initialize
-var JSON_FILE_DIR = process.env.JSON_FILE_DIR;
-// var JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
+var JSON_FILE_DIR = process.env.JSON_FILE_DIR; // var JSON_FILE_DIR = path.join(__dirname, '/public', '/jsons');
 
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server); //set web socket's server
 
-// io.sockets.on('connection', function(socket) {
-//   //check connection id
-//   console.log('connected', socket.id);
+//read file and send message in the file by websocket
+setInterval(function(){sendReadJson('output.json', 'after')}, 1000);
+setInterval(function(){sendReadJson('output_prev.json', 'prev')}, 1000);
 
-//   // echo back contents to all clientes when receive event calle "chat"
-//   socket.on('chat', function(chat) {
-//     console.log('message : ' + chat.message);
-//     io.emit('chat', chat);
-//   });
+/*
+ support functions
+*/
 
-//   // when connection is broken
-//   socket.on('disconnect', function() {
-//     console.log('disconnect');
-//   });
-// });
-
-
-//for writing. comment this section when used in actaual program
-// var randomWords = require('random-words');
-// setInterval(function() {
-//   var filename = "data.json";
-//   var filelist = fs.readdirSync(JSON_FILE_DIR);
-//   if (filename && filelist.includes(filename)) {
-//     var filepath = path.join(JSON_FILE_DIR, filename);
-//     console.log('filepath: ' + filepath);
-//     var filestr = fileRead(filepath);
-//     console.log(filestr);
-//     var jsonObj = JSON.parse(filestr);
-//     jsonObj.before = randomWords();
-//     jsonObj.after = randomWords();
-//     jsonObj.updatecount += 1;
-//     var dt = new Date();
-//     var formatted = dt.toFormat("YYYY-MM-DDTHH24:MI:SS");
-//     jsonObj.updatetime = formatted;
-//     var result = fileWrite(filepath, JSON.stringify(jsonObj, undefined, 2));
-//     if (result) { //succeed in read file and has contents
-//       console.log('succeed in write file: ' + filepath);
-//     } else {
-//       console.log("error in write file: " + filepath);
-//     }
-//   }
-// }, 1000);
-
-//for reading
-setInterval(function() {
-  var filename = "output.json";
+function sendReadJson(filename, eventname){
+  // var filename = "output.json";
+  // var eventname = "chat";
   var filelist = fs.readdirSync(JSON_FILE_DIR);
   if (filename && filelist.includes(filename)) {
     var filepath = path.join(JSON_FILE_DIR, filename);
-    console.log('filepath: ' + filepath);
     var filestr = fileRead(filepath);
-    console.log(filestr);
-    // var returnObj = {
-    //   "filepath": filepath,
-    //   "filestr": JSON.parse(filestr)
-    // }
     var returnObj = JSON.parse(filestr);
     var returnStr = JSON.stringify(returnObj);
+
+    console.log('filepath: ' + filepath);
+    console.log(filestr);
     console.log(returnStr);
     if (returnStr) { //succeed in read file and has contents
-      console.log("send data");
-      // var chat = {
-      //   before: randomWords(),
-      //   after: randomWords()
-      // };
-      console.log('send periodical message: ' + JSON.stringify(returnObj));
-      io.emit('chat', returnObj);
+      io.emit(eventname, returnObj);
+      console.log('send periodical message: ' + returnStr);
     } else {
       console.log("error or no data");
     }
   }
-}, 1000);
+}
 
 //file handling functions
 function fileCheck(filePath) {
