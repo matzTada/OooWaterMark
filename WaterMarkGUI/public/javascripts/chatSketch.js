@@ -79,20 +79,50 @@ function setup() {
 function draw() {
   clear(); // clear all
 
+  push();
+  fill(inFillColor);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  translate(windowWidth * 0.02, windowHeight * (0 + 0.25)/2);
+  rotate(-PI/2);
+  textSize(windowWidth * 0.02);
+  text('Before', 0, 0);
+  pop();
+
   drawBars(
-    10,
+    windowWidth * 0.03,
     0,
     windowWidth * 0.95,
     windowHeight * 0.25,
     prevDlist, prevEbit, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
 
+  push();
+  fill(outFillColor);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  translate(windowWidth * 0.02, windowHeight * (0.30 + 0.55)/2);
+  rotate(-PI/2);
+  textSize(windowWidth * 0.02);
+  text('Watermarked', 0, 0);
+  pop();
+ 
   drawBars(
-    10,
+    windowWidth * 0.03,
     0 + windowHeight * 0.30,
     windowWidth * 0.95,
     windowHeight * 0.25,
     afterDlist, afterEbit, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
 
+  push();
+  fill(diffFillColor);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  translate(windowWidth * 0.02, windowHeight * (0.65 + 0.85)/2);
+  rotate(-PI/2);
+  textSize(windowWidth * 0.02);
+  text('Detected', 0, 0);
+  pop();
+ 
   var afterWmarkBinStr = "";
   for (var i = 0; i < afterWmark.length; i++) {
     if (afterWmark.charCodeAt(i).toString(2).length > 8) afterWmarkBinStr += ('0000000000000000' + afterWmark.charCodeAt(i).toString(2)).slice(-16);
@@ -100,8 +130,8 @@ function draw() {
   }
 
   visBin(
-    10,
-    0 + windowHeight * 0.6,
+    windowWidth * 0.03,
+    0 + windowHeight * 0.65,
     windowWidth * 0.95,
     windowHeight * 0.2,
     afterWmarkBinStr, radius, visBinStyle, diffFillColor, diffStrokeColor, strokeWidth);
@@ -125,7 +155,7 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
   rectMode(CORNER);
   for (var j = 0; j < dataSize; j++) {
     var w = posW / (dataSize * 1.5);
-    var h = posH * 0.95 * list[j] / maxValue;
+    var h = posH * 0.90 * list[j] / maxValue;
     var x = (1.5 * j + 0.25) * w + posX;
     var y = posY + (posH - h);
 
@@ -198,7 +228,7 @@ function visBin(posX, posY, posW, posH, binStr, boxSize, style, fillColor, strok
         infoy);
 
       fill(strokeColor);
-      textSize(boxSize * 3);      
+      textSize(boxSize * 2.5);      
       textAlign(CENTER, TOP);
       text(afterWmark.charAt(Math.floor(j / 8)), 
         (startx + endx) / 2, 
