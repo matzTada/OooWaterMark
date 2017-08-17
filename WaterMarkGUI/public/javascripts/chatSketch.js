@@ -23,6 +23,7 @@ var inStrokeColor = '#00ddff';
 var outFillColor = '#c9f600';
 var outStrokeColor = '#a9cd07';
 var diffFillColor = '#FC9CA1';
+var diffStrokeColor = '#E33232';
 
 var radius = 40;
 var strokeWidth = 2;
@@ -64,6 +65,9 @@ function setup() {
   gui.addGlobals('outFillColor');
   gui.addGlobals('outStrokeColor');
   gui.addGlobals('diffFillColor');
+  gui.addGlobals('diffStrokeColor');
+
+  gui.hide();
 
   // Don't loop automatically
   // noLoop();
@@ -75,53 +79,39 @@ function setup() {
 function draw() {
   clear(); // clear all
 
-  // //afterEbit extract_bits left
-  // textSize(radius / 2);
-  // noStroke();
-  // fill(inFillColor);
-  // textAlign(LEFT, TOP);
-  // var textStr = str(afterEbit) + " " + afterEbit.length + "\n";
-  // text(textStr, 5, 5);
-
-  // //watermark detected_watermark
-  // textSize(radius / 2);
-  // noStroke();
-  // fill(outFillColor);
-  // textAlign(LEFT, TOP);
-  // var textStr = str(afterWmark) + " " + afterWmark.length + "\n";
-  // for (var i = 0; i < afterWmark.length; i++) {
-  //   textStr += afterWmark.charCodeAt(i).toString(2) + " ";
-  //   if (i % 5 == 4) textStr += "\n";
-  // }
-  // text(textStr, 5 + windowWidth / 2, 5);
-  // var textStrHeight = (textStr.split("\n").length + 1) * radius / 2;
-
-  // var afterWmarkBinStr = "";
-  // for (var i = 0; i < afterWmark.length; i++) {
-  //   if (afterWmark.charCodeAt(i).toString(2).length > 8) afterWmarkBinStr += ('0000000000000000' + afterWmark.charCodeAt(i).toString(2)).slice(-16);
-  //   else afterWmarkBinStr += ('00000000' + afterWmark.charCodeAt(i).toString(2)).slice(-8);
-  // }
-
-  // visBin(windowWidth / 2, textStrHeight, afterWmarkBinStr, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
+  drawBars(
+    10,
+    0,
+    windowWidth * 0.95,
+    windowHeight * 0.25,
+    prevDlist, prevEbit, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
 
   drawBars(
-    10, 
-    0, 
-    windowWidth * 0.8, 
-    windowHeight * 0.40, 
-    afterDlist, afterEbit, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
-  drawBars(
-    10, 
-    0 + windowHeight * 0.45, 
-    windowWidth * 0.8, 
-    windowHeight * 0.40, 
-    prevDlist, prevEbit, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
+    10,
+    0 + windowHeight * 0.30,
+    windowWidth * 0.95,
+    windowHeight * 0.25,
+    afterDlist, afterEbit, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
+
+  var afterWmarkBinStr = "";
+  for (var i = 0; i < afterWmark.length; i++) {
+    if (afterWmark.charCodeAt(i).toString(2).length > 8) afterWmarkBinStr += ('0000000000000000' + afterWmark.charCodeAt(i).toString(2)).slice(-16);
+    else afterWmarkBinStr += ('00000000' + afterWmark.charCodeAt(i).toString(2)).slice(-8);
+  }
+
+  visBin(
+    10,
+    0 + windowHeight * 0.6,
+    windowWidth * 0.95,
+    windowHeight * 0.2,
+    afterWmarkBinStr, radius, visBinStyle, diffFillColor, diffStrokeColor, strokeWidth);
 }
 
 function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
-  stroke(strokeColor);
-  rect(posX, posY, posW, posH)
-  noStroke;
+  // stroke(strokeColor);
+  // rectMode(CORNER);
+  // rect(posX, posY, posW, posH)
+  // noStroke;
 
   var maxValue = 0;
   for (var j in list) { //get maximum value in list
@@ -138,14 +128,14 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
     //text
     noStroke();
     fill(fillColor);
-    textSize(w/2);
+    textSize(w / 2);
     textAlign(CENTER, BOTTOM);
     text(list[j], x + w / 2, y);
     textAlign(CENTER, TOP);
     text(ebit.charAt(j), x + w / 2, y + h);
 
     //fill
-    if(ebit.charAt(j) == '1'){
+    if (ebit.charAt(j) == '1') {
       if (style == "normal") {
         noStroke();
         fill(fillColor);
@@ -160,7 +150,7 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
         scribble.scribbleFilling(xCoords, yCoords, gap, angle);
       }
     }
-    
+
     //rect
     strokeWeight(strokeWidth);
     stroke(strokeColor);
@@ -174,14 +164,90 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
   }
 }
 
-function visBin(posX, posY, afterEbitBinStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
-  rectMode(CENTER);
+function visBin(posX, posY, posW, posH, binStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+  rectMode(CORNER);
 
-  for (var j = 0; j < afterEbitBinStr.length; j++) {
-    var x = (1.5 * (j % 8) + 1) * boxSize + posX;
-    var y = (1.5 * Math.floor(j / 8) + 1) * boxSize + posY;
+  for (var j = 0; j < binStr.length; j++) {
+    var boxSize = posW / (1.5 * binStr.length);
+    var x = (0.25 + 1.5 * j) * boxSize + posX;
+    var y = posY;
 
-    if (afterEbitBinStr.charAt(j) == "1") {
+    if ((j + 1) % 8 == 0) {
+      var startx = x - (7 * 1.5 + 0.125) * boxSize;
+      var endx = x + (1.0 + 0.125) * boxSize;
+      // var infoy = y + (2 + j / 8) * boxSize;
+      var infoy = y + (3) * boxSize;
+      stroke(strokeColor);
+      line(startx, infoy, endx, infoy);
+      stroke(fillColor);
+      line(startx, infoy, startx, infoy - boxSize/2);
+      line(endx, infoy, endx, infoy - boxSize/2);
+
+      //text
+      noStroke();
+
+      fill(fillColor);
+      textSize(boxSize);
+      textAlign(CENTER, BOTTOM);
+      text(afterWmark.charCodeAt(Math.floor(j / 8)), 
+        (startx + endx) / 2, 
+        infoy);
+
+      fill(strokeColor);
+      textSize(boxSize * 3);      
+      textAlign(CENTER, TOP);
+      text(afterWmark.charAt(Math.floor(j / 8)), 
+        (startx + endx) / 2, 
+        infoy);
+
+    }
+
+    if (binStr.charAt(j) == "1") {
+      if (style == "normal") {
+        noStroke();
+        fill(fillColor);
+        rect(x, y, boxSize, boxSize)
+      } else if (style == "hachure") {
+        var xCoords = [x - 0.5 * boxSize, x + 0.5 * boxSize, x + 0.5 * boxSize, x - 0.5 * boxSize];
+        var yCoords = [y - 0.5 * boxSize, y - 0.5 * boxSize, y + 0.5 * boxSize, y + 0.5 * boxSize];
+        var gap = 3.5;
+        var angle = 315;
+        strokeWeight(strokeWidth * 0.5);
+        stroke(fillColor);
+        scribble.scribbleFilling(xCoords, yCoords, gap, angle);
+      }
+    }
+    strokeWeight(strokeWidth);
+    stroke(strokeColor);
+    noFill();
+    if (style == "normal") {
+      rect(x, y, boxSize, boxSize)
+    } else if (style == "hachure") {
+      scribble.scribbleRect(x, y, boxSize, boxSize);
+    }
+
+  }
+}
+
+function visBinPast(posX, posY, posW, posH, binStr, boxSize, style, fillColor, strokeColor, strokeWidth) { //0 : normal, 1 : hachure
+  rectMode(CORNER);
+
+  for (var j = 0; j < binStr.length; j++) {
+    var x = (1.5 * (j % 8)) * boxSize + posX;
+    var y = (1.5 * Math.floor(j / 8)) * boxSize + posY;
+
+    if ((j + 1) % 8 == 0) {
+      //text
+      noStroke();
+      fill(fillColor);
+      textSize(boxSize);
+      textAlign(LEFT, CENTER);
+      text(afterWmark.charCodeAt(Math.floor(j / 8)) + " " + afterWmark.charAt(Math.floor(j / 8)), 
+        x + boxSize * 1.5, 
+        y + boxSize * 0.5);
+    }
+
+    if (binStr.charAt(j) == "1") {
       if (style == "normal") {
         noStroke();
         fill(fillColor);
