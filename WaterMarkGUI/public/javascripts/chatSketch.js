@@ -113,14 +113,18 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
   // rect(posX, posY, posW, posH)
   // noStroke;
 
+  var dataSize = 32;
+  //var dataSize = list.length;
+
   var maxValue = 0;
-  for (var j in list) { //get maximum value in list
+  //get maximum value in list
+  for (var j = 0; j < dataSize; j++) {
     if (maxValue < list[j]) maxValue = list[j];
   }
 
   rectMode(CORNER);
-  for (var j in list) {
-    var w = posW / (list.length * 1.5);
+  for (var j = 0; j < dataSize; j++) {
+    var w = posW / (dataSize * 1.5);
     var h = posH * 0.95 * list[j] / maxValue;
     var x = (1.5 * j + 0.25) * w + posX;
     var y = posY + (posH - h);
