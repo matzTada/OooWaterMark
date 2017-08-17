@@ -143,8 +143,9 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
   // rect(posX, posY, posW, posH)
   // noStroke;
 
-  var dataSize = 32;
+  // var dataSize = 32;
   // var dataSize = list.length;
+  var dataSize = ebit.length;
 
   var maxValue = 0;
   //get maximum value in list
