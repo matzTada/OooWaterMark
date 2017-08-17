@@ -5,11 +5,20 @@
 
 [BitCharDiff](https://github.com/matzTada/BitCharDiff)をもとにしてます．
 
+## ざっくりと
+
+* サーバー側
+	* Code: ```/bin/www```
+	* Node, Express
+	* 同じホストのJSONファイル(```output.json```)を読んでwebsocketを用いてクライアントに送る
+* クライアント側
+	* Code: ```/public/javascripts/chatSketch.js```
+	* JavaScript, HTML
+	* JSONをwebsocket経由で受信してブラウザ上で表示する
+
 ## How-To
 
 動かし方，全体の構成は[WestlabGCTCGUI](https://github.com/matzTada/WestlabGCTCGUI#how-to)と似てます．
-```/bin/www```にサーバー側の処理が書いてあります．  
-指定したディレクトリの```output.json```という名前のファイルを読んで，websocketで定期送信します．  
 
 ### with Docker
 * 本番はこっちを使う
@@ -35,15 +44,6 @@ bash start.sh
 	* ```OooWaterMark/WaterMarkGUI/start.sh```を書き換えてください(```#change here if you start express app without Docker```)と書いてあるところを変える．
 	* ```PORT``` : gui用のport
 	* ```JSON_FILE_DIR``` : 各アプリケーションの設定が書かれたJSONファイルが入っているディレクトリの変更
-
-## ざっくりと
-
-* サーバー側
-	* 同じホストのJSONファイルを読んでwebsocketを用いてクライアントに送る
-	* Node, Express
-* クライアント側
-	* JSONをwebsocket経由で受信してブラウザ上で表示する
-	* JavaScript, HTML
 
 ## To Do
 
