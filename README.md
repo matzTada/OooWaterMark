@@ -45,13 +45,15 @@ bash start.sh
 	* ```PORT``` : gui用のport
 	* ```JSON_FILE_DIR``` : 各アプリケーションの設定が書かれたJSONファイルが入っているディレクトリの変更
 
-## To Do
+## おまけ(```/resource/periodicChanger.js```)
 
-* htmlから読めるようにしたほうがいいかも?
-* html作成機を作る？（NUCが止まっちゃったときのデモ用，テスト用）
-* ~~Web serverを立てる~~
-* ~~Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>~~
-	* (動いたので，やってない)~~Serure WebSocket(wss)を使うべきなのかも？~~
+```output.json```と```output_prev.json```を定期的に書き換える  
+電子透かし側がうまく動かなったときにローカルで変わってる風に見せられるのでオススメ
+
+```
+cd resource
+node periodicChanger.js
+```
 
 ## files
 
@@ -59,6 +61,14 @@ bash start.sh
 * ```/WaterMarkGUI/app.js``` : server side program mainly for frontend
 * ```/WaterMarkGUI/views/index.ejs``` : client side script
 * ```/WaterMarkGui/public/javascripts/chatSketch.js``` : client side program mainly for websocket and processing.js
+
+## To Do
+
+* （output.jsonから読むようにしたのでやらない）~~htmlから読めるようにしたほうがいいかも?~~
+* （代わりにoutput.jsonとoutput_prev.jsonを定期的に書き換えるperiodicChanger.jsを作った）~~html作成機を作る？（NUCが止まっちゃったときのデモ用，テスト用）~~
+* ~~Web serverを立てる~~
+* ~~Websocketとも結合してみる <https://team-lab.github.io/skillup-nodejs/3/1.html>~~
+	* (動いたので，やってない)~~Serure WebSocket(wss)を使うべきなのかも？~~
 
 ## Info.
 
