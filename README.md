@@ -45,7 +45,7 @@ bash start.sh
 	* ```PORT``` : gui用のport
 	* ```JSON_FILE_DIR``` : 各アプリケーションの設定が書かれたJSONファイルが入っているディレクトリの変更
 
-## おまけ(```/resource/periodicChanger.js```)
+## option (JSON file changer)
 
 ```output.json```と```output_prev.json```を定期的に書き換える  
 電子透かし側がうまく動かなったときにローカルで変わってる風に見せられるのでオススメ
