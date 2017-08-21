@@ -90,9 +90,9 @@ function draw() {
   pop();
 
   drawBars(
-    windowWidth * 0.03,
+    windowWidth * 0.05,
     0,
-    windowWidth * 0.95,
+    windowWidth * 0.90,
     windowHeight * 0.25,
     prevDlist, prevEbit, radius, visBinStyle, inFillColor, inStrokeColor, strokeWidth);
 
@@ -107,9 +107,9 @@ function draw() {
   pop();
  
   drawBars(
-    windowWidth * 0.03,
+    windowWidth * 0.05,
     0 + windowHeight * 0.30,
-    windowWidth * 0.95,
+    windowWidth * 0.90,
     windowHeight * 0.25,
     afterDlist, afterEbit, radius, visBinStyle, outFillColor, outStrokeColor, strokeWidth);
 
@@ -130,9 +130,9 @@ function draw() {
   }
 
   visBin(
-    windowWidth * 0.03,
+    windowWidth * 0.05,
     0 + windowHeight * 0.65,
-    windowWidth * 0.95,
+    windowWidth * 0.90,
     windowHeight * 0.2,
     afterWmarkBinStr, radius, visBinStyle, diffFillColor, diffStrokeColor, strokeWidth);
 }
@@ -143,8 +143,9 @@ function drawBars(posX, posY, posW, posH, list, ebit, boxSize, style, fillColor,
   // rect(posX, posY, posW, posH)
   // noStroke;
 
-  var dataSize = 32;
+  // var dataSize = 32;
   // var dataSize = list.length;
+  var dataSize = ebit.length;
 
   var maxValue = 0;
   //get maximum value in list
